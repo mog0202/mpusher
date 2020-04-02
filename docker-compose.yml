@@ -1,0 +1,35 @@
+version: '3'
+volumes:
+  redis-data:
+  zookeeper-data:
+  mpush-data:
+  mpush-alloc-data:
+  nginx-data:
+networks:
+  mpush:
+services:
+  redis:
+    image: redis:6.0-rc2-alpine
+    container_name: redis
+    restart: unless-stopped
+    command: --appendonly yes
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+#    network_mode: "host"
+    networks:
+      - mpush
+  zookeeper:
+    image: zookeeper:3.5.7
+    container_name: zookeeper
+    restart: unless-stopped
+    ports:
+      - 2181:2181
+#      - 8080:8080
+#      - 2888:2888
+    volumes:
+      - zookeeper-data:/data
+#    network_mode: "host"
+    networks:
+      - mpush
